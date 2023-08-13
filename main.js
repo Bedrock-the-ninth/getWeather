@@ -54,7 +54,24 @@ const getWeather = () => {
     .get(
       `https://api.openweathermap.org/data/2.5/weather?lat=36.3109&lon=59.51&appid=${appid}&units=metric`
     )
-    .then((res) => console.log(res))
+    .then((res) => {
+      $("#res").html = `
+        <div class="card text-center m-5 p-1">
+          <div class="card-heading display-4 d-grid">
+            <h1>${res.data.main.temp} degrees
+            <span class="small">feels like ${res.data.main.feels_like}</span></h1>
+            <span>Max: ${res.data.main.temp_max}</span>
+            <span>Min: ${res.data.main.temp_min}</span>
+          </div>
+          <div class="car-body">
+            <p>The weather is: ${res.data.weather[0].description}</p>
+            <p>Wind speed: ${res.data.wind.speed}</p>
+            <p>You are currently in ${res.data.sys.country}, ${res.data.name}</p>
+            <p>Sunrise in: ${res.data.sys.sunrise}</p>
+            <p>Sunset in: ${res.data.sys.sunset}</p>
+          </div>
+        </div>`;
+    })
     .catch((err) => console.log(err));
 };
 

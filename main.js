@@ -1,24 +1,51 @@
 const appid = "dac0c43ffcfccadddd05c3ec10c3d838";
 
-const getLoc = () => {
+const coordsDisplay = () => {
+  const succes = (pos) => {
+    let altAndLon = pos.coords.altitude + "," + pos.coords.longitude;
+
+    $("#res").html = `
+    <div class="card text-center">
+    <h1 class="card-header">You are located at:</h1>
+    <div class="card-body">
+      <p>Your latitude: ${pos.coords.altitude}</p>
+      <p>Your longitude: ${pos.coords.longitude}</p>
+      <p>Accuracy: ${pos.coords.accuracy} meters</p>
+    </div>
+  </div>
+  `;
+
+    return altAndLon;
+  };
+
+  const error = (error) => {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        $("#res").html("User denied the request for Geolocation.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        $("#res").html("Location information is unavailable.");
+        break;
+      case error.TIMEOUT:
+        $("#res").html("The request to get user location timed out.");
+        console.log("The request to get user location timed out.");
+        break;
+      case error.UNKNOWN_ERROR:
+        $("#res").html("An unknown error occurred.");
+        break;
+    }
+  };
+
   const options = {
     enableHighAccuracy: true,
     timeout: 5000,
     maximumAge: 0,
   };
 
-  const success = (pos) => {
-    const crd = pos.coords;
-    let coordination = [crd.latitude, crd.longitude, crd.accuracy];
-    postMessage(coordination);
-  };
-
-  const error = (err) => {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
-  };
-
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, error, options);
+    navigator.geolocation.getCurrentPosition(succes, error, options);
+  } else {
+    $("#res").html("Geolocation is not supported");
   }
 };
 
@@ -32,10 +59,5 @@ const getWeather = () => {
 };
 
 // Event listeners
-$("#get").on("click", getWeather);
-$("#getLoc").click(() => {
-  var coordArray = getCoords;
-  return coordArray;
-});
-
-console.log(coordArray);
+$("#get").click(getWeather);
+$("#getLoc").click(coordsDisplay);

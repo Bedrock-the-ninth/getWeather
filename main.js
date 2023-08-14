@@ -1,4 +1,5 @@
 const appid = "dac0c43ffcfccadddd05c3ec10c3d838";
+let usrLat, usrLng;
 
 // GEOLOCATION API //
 const getPosition = (options) => {
@@ -66,10 +67,10 @@ const showOutput = (res) => {
   </div>`);
 };
 
-const getWeather = () => {
+const getWeather = (lat, lng) => {
   axios
     .get(
-      `https://api.openweathermap.org/data/2.5/weather?lat=36.3109&lon=59.51&appid=${appid}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${appid}&units=metric`
     )
     .then((res) => {
       showOutput(res);
@@ -78,7 +79,21 @@ const getWeather = () => {
 };
 
 // Event listener //
-$("#get").click(getWeather);
+$("input").on("change", () => {
+  usrLat = $("#lat").val();
+  usrLng = $("#lng").val();
+  if ($("#lat").val() != "" && $("#lng").val() != "") {
+    $("#get").removeClass("disabled");
+  }
+
+  console.log(usrLat + "," + usrLng);
+});
+
+$("#get").click(() => {
+  if ($("#lat").val() != "" && $("#lng").val() != "") {
+    getWeather(usrLat, usrLng);
+  }
+});
 $("#getLoc").click(async () => {
   const coordsList = await gpsLocation();
 

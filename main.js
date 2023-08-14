@@ -1,5 +1,6 @@
 const appid = "dac0c43ffcfccadddd05c3ec10c3d838";
 
+// GEOLOCATION API //
 const getPosition = (options) => {
   return new Promise(function (resolve, reject) {
     if (navigator.geolocation) {
@@ -45,6 +46,7 @@ const timeConvert = (time) => {
   return readable;
 };
 
+// Weather API //
 const showOutput = (res) => {
   $("#res").html(`
   <div class="card text-center m-5 p-1">
@@ -75,7 +77,7 @@ const getWeather = () => {
     .catch((err) => console.log(err));
 };
 
-// Event listener
+// Event listener //
 $("#get").click(getWeather);
 $("#getLoc").click(async () => {
   const coordsList = await gpsLocation();
